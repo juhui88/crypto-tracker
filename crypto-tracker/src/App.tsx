@@ -3,7 +3,7 @@ import { createGlobalStyle } from "styled-components";
 import Router from './Router';
 
 const GlobalStyle = createGlobalStyle`
-  @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap');
   html, body, div, span, applet, object, iframe,
   h1, h2, h3, h4, h5, h6, p, blockquote, pre,
   a, abbr, acronym, address, big, cite, code,
@@ -55,9 +55,9 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
   body {
-    font-family: 'Source Sans Pro', sans-serif;
     background-color:${(props) => props.theme.bgColor};
-    color:${(props) => props.theme.textColor}
+    color:${(props) => props.theme.textColor};
+    font-family:fantasy;
   }
   a {
     text-decoration:none;
