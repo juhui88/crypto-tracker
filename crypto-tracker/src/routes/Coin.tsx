@@ -1,8 +1,10 @@
 import axios from "axios";
 import React, {useEffect, useState, } from "react";
+import { useQuery } from "react-query";
 import { useParams, useLocation, Routes, Route, useMatch} from "react-router";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { fetchCoinInfo, fetchCoinTickers } from "../api";
 import Chart from "./Chart";
 import Price from "./Price";
 
@@ -141,16 +143,13 @@ function Coin() {
   const { coinId } = useParams()as unknown as RouteParams; 
   /* react-router-dom 버전 6부터는 useParams에 String|undefined가 default 값으로 지정되어
   interface로 string 지정 시 'String ,String | undefined ' 로 타입이 지정되어 오류가 나는 것은 인지*/
-  const [loading, setLoading] = useState(true);
   const {state} = useLocation() as RouteState;
-  
-  const [info, setInfo] = useState<InfoData>();
-  const [priceInfo, setPriceInfo] = useState<PriceData>();
-
-
   const priceMatch = useMatch("/:coinId/price");
   const chartMatch = useMatch("/:coinId/chart");
-
+  
+  /* const [loading, setLoading] = useState(true);
+  const [info, setInfo] = useState<InfoData>();
+  const [priceInfo, setPriceInfo] = useState<PriceData>();
 
   const getCoinInfo = () => {
     axios.get(`https://api.coinpaprika.com/v1/coins/${coinId}`)
@@ -165,7 +164,12 @@ function Coin() {
         })
     setLoading(false);
   };
-  useEffect(() => {getCoinInfo()}, []);
+  useEffect(() => {getCoinInfo()}, []); */
+
+  const {isLoading: infoLoading, data : infoData} = useQuery<InfoData>(["info", coinId], () => fetchCoinInfo(coinId))
+  const {isLoading: tickersLoading, data : tickersData} = useQuery<PriceData>(["tickers", coinId], () => fetchCoinTickers(coinId))
+  
+  const loading = infoLoading || tickersLoading;
   return (
     <Container>
       <Header>
@@ -176,33 +180,33 @@ function Coin() {
           <Overview>
             <OverviewItem>
               <span>RANK:</span>
-              <span>{info?.rank}</span>
+              <span>{infoData?.rank}</span>
             </OverviewItem>
 
             <OverviewItem>
               <span>Symbol:</span>
-              <span>{info?.symbol}</span>
+              <span>{infoData?.symbol}</span>
             </OverviewItem>
 
             <OverviewItem>
               <span>OPEN SOURCE:</span>
-              <span>{info?.open_source ? "Yes" : "No"}</span>
+              <span>{infoData?.open_source ? "Yes" : "No"}</span>
             </OverviewItem>
           </Overview>
 
           <Description>
-            {info?.description}
+            {infoData?.description}
           </Description>
 
           <Overview>
             <OverviewItem>
               <span>Total Suply:</span>
-              <span>{priceInfo?.total_supply}</span>
+              <span>{tickersData?.total_supply}</span>
             </OverviewItem>
 
             <OverviewItem>
               <span>Max Supply:</span>
-              <span>{priceInfo?.max_supply}</span>
+              <span>{tickersData?.max_supply}</span>
             </OverviewItem>
           </Overview>
 

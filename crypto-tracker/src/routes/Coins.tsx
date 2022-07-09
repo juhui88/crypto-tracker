@@ -2,6 +2,8 @@ import React, {useState, useEffect} from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import {fetchCoins} from "../api"
+import { useQuery } from "react-query";
 
 const Container = styled.div`
     
@@ -19,7 +21,7 @@ const Coin = styled.li`
     margin:0 auto 20px;
     background: white;
     border-radius: 15px;
-    width: 700px;
+    width: 500px;
     height: 9vh;
     font-size: 20px;
     font-weight: bold;
@@ -52,7 +54,7 @@ const Img = styled.img`
     margin: 0 10px 0 10px;
 `
 
-interface CoinInterface {
+interface Icoin {
     id: string,
     name: string,
     symbol: string,
@@ -63,7 +65,7 @@ interface CoinInterface {
 }
 
 function Coins() {
-    const [coins, setCoins] = useState<CoinInterface[]>([]);
+    /*const [coins, setCoins] = useState<CoinInterface[]>([]);
     const [loading, setLoading] = useState(true);
 
     const getCoins = () => {
@@ -76,18 +78,20 @@ function Coins() {
 
     useEffect(() => {
         getCoins()
-    }, []);
+    }, []);*/
+    
+    const {isLoading, data} = useQuery<Icoin[]>("allCoins", fetchCoins)
     
     return (
         <Container>
             <Header>
                 <Title>COIN</Title>
             </Header>
-            {loading ? (
+            {isLoading ? (
                 <Loader>Loading...</Loader>
             ) : (
                 <CoinsList>
-                {coins.map((coin) => (
+                {data?.map((coin) => (
                     <Coin key={coin.id}>
                         <Link to = {`/${coin.id}`} state = {{name: coin.name}}>
                             <Img src = {`https://coinicons-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`}/>
