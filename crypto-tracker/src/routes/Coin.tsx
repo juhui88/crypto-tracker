@@ -4,7 +4,7 @@ import { useQuery } from "react-query";
 import { useParams, useLocation, Routes, Route, useMatch} from "react-router";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { fetchCoinInfo, fetchCoinTickers } from "../api";
+import { axiosCoinInfo, axiosCoinTickers } from "../api";
 import Chart from "./Chart";
 import Price from "./Price";
 
@@ -166,8 +166,8 @@ function Coin() {
   };
   useEffect(() => {getCoinInfo()}, []); */
 
-  const {isLoading: infoLoading, data : infoData} = useQuery<InfoData>(["info", coinId], () => fetchCoinInfo(coinId))
-  const {isLoading: tickersLoading, data : tickersData} = useQuery<PriceData>(["tickers", coinId], () => fetchCoinTickers(coinId))
+  const {isLoading: infoLoading, data : infoData} = useQuery<InfoData>(["info", coinId], () => axiosCoinInfo(coinId))
+  const {isLoading: tickersLoading, data : tickersData} = useQuery<PriceData>(["tickers", coinId], () => axiosCoinTickers(coinId))
   
   const loading = infoLoading || tickersLoading;
   return (
@@ -222,8 +222,9 @@ function Coin() {
           
 
           <Routes>
+            <Route path = "chart" element= {<Chart coinId = {coinId}/>}/>
             <Route path = "price"element={<Price/>}/>
-            <Route path = "chart" element= {<Chart/>}/>
+            
           </Routes>
         </>
       )}

@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import {fetchCoins} from "../api"
+import {axiosCoins} from "../api"
 import { useQuery } from "react-query";
 
 const Container = styled.div`
@@ -80,7 +80,7 @@ function Coins() {
         getCoins()
     }, []);*/
     
-    const {isLoading, data} = useQuery<Icoin[]>("allCoins", fetchCoins)
+    const {isLoading, data} = useQuery<Icoin[]>("allCoins", axiosCoins)
     
     return (
         <Container>
