@@ -11,6 +11,7 @@ const Header = styled.header`
     display: flex;
     justify-content: center;
     align-items: center;
+    font-weight: 700;
 `
 const CoinsList = styled.ul`
 `
@@ -18,10 +19,10 @@ const Coin = styled.li`
     margin:0 auto 20px;
     background: white;
     border-radius: 15px;
-    width: 70vw;
+    width: 700px;
     height: 9vh;
     font-size: 20px;
-    
+    font-weight: bold;
     a {
         transition: color 0.2s ease-in;
         color: ${(props) => props.theme.bgColor};
@@ -39,6 +40,7 @@ const Coin = styled.li`
 const Title = styled.h1`
     font-size: 48px;
     color: ${(props) => props.theme.accentColor};
+    
 `;
 const Loader = styled.span`
   text-align: center;
