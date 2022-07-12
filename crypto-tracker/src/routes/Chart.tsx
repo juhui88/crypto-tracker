@@ -1,30 +1,97 @@
 import {useQuery} from 'react-query';
 import { axiosCoinHistory } from '../api';
-import ApexChart from 'react-apexcharts'
+import ReactApexChart from 'react-apexcharts';
+import { title } from 'process';
 
 interface ChartProps{
     coinId: string;
 }
 interface IHistorical {
-    time_open: string;
-    time_close: string;
-    open: number;
-    high: number;
-    low: number;
-    close: number;
-    volume: number;
+    time_open: number;
+    time_close: number;
+    open: string;
+    high: string;
+    low: string;
+    close: string;
+    volume: string;
     market_cap: number;
-  }
-interface IData {
-
+}
+interface ICandleChartItem {
+  x: Date;
+  y: number[];
 }
 function Chart({coinId} : ChartProps){
-    const {isLoading, data} = useQuery<IHistorical[]>(["ohlcv", coinId], () => axiosCoinHistory(coinId));    
+    const {isLoading, data} = useQuery<IHistorical[]>(["ohlcv", coinId], () => axiosCoinHistory(coinId), {refetchInterval:5000},);    
+    
     return (
         <div>
-            {isLoading? "Loading chart..." : 
-                ( <ApexChart 
-                    type = "line" 
+            {isLoading? "Loading chart..." : (
+                <ReactApexChart
+                type="candlestick"
+                series={[
+                    {
+                        name:"Price",
+                        data: data?.map((props) => {
+                          return {
+                            x: new Date(props.time_open * 1000),
+                            y: [
+                              parseFloat(props.open),
+                              parseFloat(props.high),
+                              parseFloat(props.low),
+                              parseFloat(props.close),
+                            ],
+                          };
+                        }) as ICandleChartItem[],
+                      },
+                ]}
+                options={{
+                  theme: {
+                    mode: "dark",
+                  },
+                  chart: {
+                    type: "candlestick",
+                    height: 350,
+                    width: 500,
+                    toolbar: {
+                      show:false,
+                    },
+                    background: "transparent",
+                  },
+                  stroke: {
+                    curve: "smooth",
+                    width: 2,
+                  },
+                  yaxis: {
+                    show: false,
+                  },
+                  xaxis: {
+                    type: "datetime",
+                    categories: data?.map((price) => price.time_close),
+                    labels: {
+                      style: {
+                        colors: '#9c88ff'
+                      }
+                    }
+                  },
+                  plotOptions: {
+                    candlestick: {
+                      colors: {
+                        upward: '#3C90EB',
+                        downward: '#DF7D46'
+                      }
+                    }
+                  }
+                }}
+              />
+                    
+            )}
+        </div>
+    )
+}
+
+export default Chart;
+
+            /* type = "line" 
                     series={[
                         {
                             name: "Price",
@@ -73,11 +140,4 @@ function Chart({coinId} : ChartProps){
                                 formatter: (value) => `$${value.toFixed(2)}`,
                             },
                         },
-                    }}
-                />
-            )}
-        </div>
-    )
-}
-
-export default Chart;
+                    }} */

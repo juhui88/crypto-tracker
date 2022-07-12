@@ -7,6 +7,9 @@ import styled from "styled-components";
 import { axiosCoinInfo, axiosCoinTickers } from "../api";
 import Chart from "./Chart";
 import Price from "./Price";
+import {Helmet} from "react-helmet";
+import { BiHomeHeart } from "react-icons/bi"
+import {MdDarkMode} from "react-icons/md"
 
 const Container = styled.div`
   width: 55vw;
@@ -67,7 +70,7 @@ const Tabs = styled.div`
   }
 `
 const Tab = styled.p<{isActive:boolean}>`
-  background: #1b1f20;
+  background: ${(props) => props.theme.itemBgColor};
   border-radius: 10px;
   font-size: 20px;
   padding: 15px;
@@ -76,6 +79,14 @@ const Tab = styled.p<{isActive:boolean}>`
     color: ${(props) =>props.isActive ? props.theme.accentColor : props.theme.textColor};
   }
   
+`
+
+const Home = styled.div`
+  position: fixed;
+  top:10px;
+  left: 10px;
+  font-size: 30px;
+
 `
 
 interface RouteParams {
@@ -119,24 +130,26 @@ interface RouteParams {
   first_data_at: string;
   last_updated: string;
   quotes: {
-    ath_date: string;
-    ath_price:number;
-    market_cap:number;
-    market_cap_change_24h:number;
-    percent_change_1h:number;
-    percent_change_1y:number;
-    percent_change_6h:number;
-    percent_change_7d:number;
-    percent_change_12h:number;
-    percent_change_15m:number;
-    percent_change_24h:number;
-    percent_change_30d:number;
-    percent_change_30m:number;
-    percent_from_price_ath:number;
-    price:number;
-    volume_24h:number;
-    volume_24h_change_24h:number;
-  };
+    USD: {
+        ath_date: string;
+        ath_price:number;
+        market_cap:number;
+        market_cap_change_24h:number;
+        percent_change_1h:number;
+        percent_change_1y:number;
+        percent_change_6h:number;
+        percent_change_7d:number;
+        percent_change_12h:number;
+        percent_change_15m:number;
+        percent_change_24h:number;
+        percent_change_30d:number;
+        percent_change_30m:number;
+        percent_from_price_ath:number;
+        price:number;
+        volume_24h:number;
+        volume_24h_change_24h:number;
+    }
+  }
 }
 
 function Coin() {
@@ -167,14 +180,20 @@ function Coin() {
   useEffect(() => {getCoinInfo()}, []); */
 
   const {isLoading: infoLoading, data : infoData} = useQuery<InfoData>(["info", coinId], () => axiosCoinInfo(coinId))
-  const {isLoading: tickersLoading, data : tickersData} = useQuery<PriceData>(["tickers", coinId], () => axiosCoinTickers(coinId))
+  const {isLoading: tickersLoading, data : tickersData} = useQuery<PriceData>(["tickers", coinId], () => axiosCoinTickers(coinId), {refetchInterval:5000,})
   
   const loading = infoLoading || tickersLoading;
   return (
     <Container>
+      <Helmet>
+        <title>{coinId}</title>
+      </Helmet>
       <Header>
           <Title>{coinId}</Title>
       </Header>
+      <Home>
+        <Link to = "/"><BiHomeHeart/></Link>   
+      </Home>
       {loading ? <Loader>Loading...</Loader>: (
         <>
           <Overview>
@@ -189,8 +208,8 @@ function Coin() {
             </OverviewItem>
 
             <OverviewItem>
-              <span>OPEN SOURCE:</span>
-              <span>{infoData?.open_source ? "Yes" : "No"}</span>
+              <span>Price:</span>
+              <span>${tickersData?.quotes.USD.price.toFixed(2)}</span>
             </OverviewItem>
           </Overview>
 
@@ -218,13 +237,11 @@ function Coin() {
               <Link to={`/${coinId}/price`}>Price</Link>
             </Tab>
           </Tabs>
-          
-          
+                 
 
           <Routes>
             <Route path = "chart" element= {<Chart coinId = {coinId}/>}/>
-            <Route path = "price"element={<Price/>}/>
-            
+            <Route path = "price"element={<Price coinId = {coinId}/>}/>
           </Routes>
         </>
       )}

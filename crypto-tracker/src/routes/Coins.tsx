@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import {axiosCoins} from "../api"
 import { useQuery } from "react-query";
+import { Helmet } from "react-helmet";
+import {MdDarkMode} from "react-icons/md"
 
 const Container = styled.div`
     
@@ -53,7 +55,16 @@ const Img = styled.img`
     height: 30px;
     margin: 0 10px 0 10px;
 `
+const Mode = styled.div`
+    position: fixed;
+    top:10px;
+    right: 10px;
+    font-size: 30px;
+    &:hover {
+        cursor:pointer;
+    }
 
+`
 interface Icoin {
     id: string,
     name: string,
@@ -84,9 +95,15 @@ function Coins() {
     
     return (
         <Container>
+            <Helmet>
+                <title>COIN</title>
+            </Helmet>
             <Header>
                 <Title>COIN</Title>
             </Header>
+            <Mode>
+                <MdDarkMode/>
+            </Mode>
             {isLoading ? (
                 <Loader>Loading...</Loader>
             ) : (
