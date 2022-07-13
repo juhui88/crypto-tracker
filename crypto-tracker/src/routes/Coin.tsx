@@ -75,6 +75,7 @@ const Tab = styled.p<{isActive:boolean}>`
   font-size: 20px;
   padding: 15px;
   text-align: center;
+  
   a {
     color: ${(props) =>props.isActive ? props.theme.accentColor : props.theme.textColor};
   }
@@ -194,7 +195,7 @@ function Coin({isDarkMode, toggleDarkMode} : Imode) {
 
   const {isLoading: infoLoading, data : infoData} = useQuery<InfoData>(["info", coinId], () => axiosCoinInfo(coinId))
   const {isLoading: tickersLoading, data : tickersData} = useQuery<PriceData>(["tickers", coinId], () => axiosCoinTickers(coinId), {refetchInterval:5000,})
-  
+
   const loading = infoLoading || tickersLoading;
   return (
     <Container>
@@ -202,7 +203,7 @@ function Coin({isDarkMode, toggleDarkMode} : Imode) {
         <title>{coinId}</title>
       </Helmet>
       <Header>
-          <Title>{coinId}</Title>
+          <Title> {state?.name ? state.name : loading ? "Loading..." : infoData?.name} </Title>
       </Header>
       <Home>
         <Link to = "/"><BiHomeHeart/></Link>   
