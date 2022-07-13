@@ -17,6 +17,7 @@ const PriceItem = styled.div`
 `
 const AthPriceItem = styled(PriceItem)`
     background-color : ${(props) => props.theme.bgColor};
+    font-size: 20px;
     display:block;
     text-align: center;
 `
@@ -26,7 +27,7 @@ const Text = styled.p`
 `
 const DataText = styled.p`
     flex-grow: 1;
-    border-left: solid 1px white;
+    border-left: solid 1px ${(props) => props.theme.textColor};
     padding-left:10px;
 `
 

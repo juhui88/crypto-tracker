@@ -18,13 +18,17 @@ const Header = styled.header`
     font-weight: 700;
 `
 const CoinsList = styled.ul`
+    margin: 0 auto;
+    width: 800px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
 `
 const Coin = styled.li`
     margin:0 auto 20px;
     background: ${(props) => props.theme.itemBgColor};
     border-radius: 15px;
-    width: 500px;
-    height: 9vh;
+    width: 180px;
+    height: 7vh;
     font-size: 20px;
     font-weight: bold;
     a {
@@ -32,12 +36,11 @@ const Coin = styled.li`
         color: ${(props) => props.theme.textColor};
         display: flex;
         align-items: center;
-        height: 9vh;
+        height: 7vh;
     }
     &:hover {
         a{
             color: ${(props) => props.theme.accentColor};
-            font-size: 23px;
         }
         
     }
@@ -119,7 +122,7 @@ function Coins({isDarkMode, toggleDarkMode}: Imode) {
                     <Coin key={coin.id}>
                         <Link to = {`/${coin.id}`} state = {{name: coin.name}}>
                             <Img src = {`https://coinicons-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`}/>
-                            {coin.name}
+                            {coin.symbol}
                         </Link>
                     </Coin>
                 ))}

@@ -69,15 +69,15 @@ function Chart({coinId} : ChartProps){
                     categories: data?.map((price) => price.time_close),
                     labels: {
                       style: {
-                        colors: '#9c88ff'
+                        colors: '#000000'
                       }
                     }
                   },
                   plotOptions: {
                     candlestick: {
                       colors: {
-                        upward: '#3C90EB',
-                        downward: '#DF7D46'
+                        upward: '#ff7675',
+                        downward: '#74b9ff'
                       }
                     }
                   }
