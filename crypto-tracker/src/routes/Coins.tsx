@@ -5,7 +5,7 @@ import axios from "axios";
 import {axiosCoins} from "../api"
 import { useQuery } from "react-query";
 import { Helmet } from "react-helmet";
-import {MdDarkMode} from "react-icons/md"
+import {MdDarkMode, MdOutlineDarkMode} from "react-icons/md"
 
 const Container = styled.div`
     
@@ -21,7 +21,7 @@ const CoinsList = styled.ul`
 `
 const Coin = styled.li`
     margin:0 auto 20px;
-    background: white;
+    background: ${(props) => props.theme.itemBgColor};
     border-radius: 15px;
     width: 500px;
     height: 9vh;
@@ -29,7 +29,7 @@ const Coin = styled.li`
     font-weight: bold;
     a {
         transition: color 0.2s ease-in;
-        color: ${(props) => props.theme.bgColor};
+        color: ${(props) => props.theme.textColor};
         display: flex;
         align-items: center;
         height: 9vh;
@@ -37,6 +37,7 @@ const Coin = styled.li`
     &:hover {
         a{
             color: ${(props) => props.theme.accentColor};
+            font-size: 23px;
         }
         
     }
@@ -62,6 +63,7 @@ const Mode = styled.div`
     font-size: 30px;
     &:hover {
         cursor:pointer;
+        color: 
     }
 
 `
@@ -75,7 +77,11 @@ interface Icoin {
     type: string,
 }
 
-function Coins() {
+interface Imode {
+    isDarkMode : boolean,
+    toggleDarkMode: Function,
+}
+function Coins({isDarkMode, toggleDarkMode}: Imode) {
     /*const [coins, setCoins] = useState<CoinInterface[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -101,8 +107,9 @@ function Coins() {
             <Header>
                 <Title>COIN</Title>
             </Header>
-            <Mode>
-                <MdDarkMode/>
+            <Mode onClick = {() => toggleDarkMode()}>
+                {isDarkMode ? <MdDarkMode/> : <MdOutlineDarkMode/>}
+                
             </Mode>
             {isLoading ? (
                 <Loader>Loading...</Loader>

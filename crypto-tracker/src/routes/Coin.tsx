@@ -9,7 +9,7 @@ import Chart from "./Chart";
 import Price from "./Price";
 import {Helmet} from "react-helmet";
 import { BiHomeHeart } from "react-icons/bi"
-import {MdDarkMode} from "react-icons/md"
+import {MdDarkMode, MdOutlineDarkMode} from "react-icons/md"
 
 const Container = styled.div`
   width: 55vw;
@@ -32,7 +32,7 @@ const Loader = styled.span`
   font-size: 20px;
 `;
 const Overview = styled.div `
-  background: #1b1f20;
+  background: ${(props) => props.theme.itemBgColor};
   border-radius: 10px;
   
   margin: auto;
@@ -88,7 +88,17 @@ const Home = styled.div`
   font-size: 30px;
 
 `
+const Mode = styled.div`
+    position: fixed;
+    top:10px;
+    right: 10px;
+    font-size: 30px;
+    &:hover {
+        cursor:pointer;
+        color: 
+    }
 
+`
 interface RouteParams {
   coinId: string;
 }
@@ -151,8 +161,11 @@ interface RouteParams {
     }
   }
 }
-
-function Coin() {
+interface Imode {
+  isDarkMode : boolean,
+  toggleDarkMode: Function,
+}
+function Coin({isDarkMode, toggleDarkMode} : Imode) {
   const { coinId } = useParams()as unknown as RouteParams; 
   /* react-router-dom 버전 6부터는 useParams에 String|undefined가 default 값으로 지정되어
   interface로 string 지정 시 'String ,String | undefined ' 로 타입이 지정되어 오류가 나는 것은 인지*/
@@ -194,6 +207,9 @@ function Coin() {
       <Home>
         <Link to = "/"><BiHomeHeart/></Link>   
       </Home>
+      <Mode onClick = {() => toggleDarkMode()}>
+          {isDarkMode ? <MdDarkMode/> : <MdOutlineDarkMode/>}
+      </Mode>
       {loading ? <Loader>Loading...</Loader>: (
         <>
           <Overview>
