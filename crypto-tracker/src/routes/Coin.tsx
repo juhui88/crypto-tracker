@@ -89,17 +89,7 @@ const Home = styled.div`
   font-size: 30px;
 
 `
-const Mode = styled.div`
-    position: fixed;
-    top:10px;
-    right: 10px;
-    font-size: 30px;
-    &:hover {
-        cursor:pointer;
-        color: 
-    }
 
-`
 interface RouteParams {
   coinId: string;
 }
@@ -162,11 +152,8 @@ interface RouteParams {
     }
   }
 }
-interface Imode {
-  isDarkMode : boolean,
-  toggleDarkMode: Function,
-}
-function Coin({isDarkMode, toggleDarkMode} : Imode) {
+
+function Coin() {
   const { coinId } = useParams()as unknown as RouteParams; 
   /* react-router-dom 버전 6부터는 useParams에 String|undefined가 default 값으로 지정되어
   interface로 string 지정 시 'String ,String | undefined ' 로 타입이 지정되어 오류가 나는 것은 인지*/
@@ -208,9 +195,7 @@ function Coin({isDarkMode, toggleDarkMode} : Imode) {
       <Home>
         <Link to = "/"><BiHomeHeart/></Link>   
       </Home>
-      <Mode onClick = {() => toggleDarkMode()}>
-          {isDarkMode ? <MdDarkMode/> : <MdOutlineDarkMode/>}
-      </Mode>
+      
       {loading ? <Loader>Loading...</Loader>: (
         <>
           <Overview>

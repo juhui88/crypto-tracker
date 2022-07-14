@@ -2,8 +2,9 @@ import React,{useState} from 'react';
 import { createGlobalStyle } from "styled-components";
 import Router from './Router';
 import {ReactQueryDevtools} from 'react-query/devtools'
-import { ThemeProvider } from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
 import { darkTheme, lightTheme } from './theme';
+import {MdDarkMode, MdOutlineDarkMode} from "react-icons/md"
 
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
@@ -66,6 +67,20 @@ const GlobalStyle = createGlobalStyle`
     color:${(props) => props.theme.textColor};
   }
 `;
+
+const Mode = styled.button`
+  border:none;
+  background: none;
+  position: fixed;
+  top:10px;
+  right: 10px;
+  font-size: 30px;
+  &:hover {
+    cursor:pointer;
+  }
+  color: ${props => props.theme.accentColor}
+`
+
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
@@ -76,8 +91,11 @@ function App() {
   return (
     <>
     <ThemeProvider theme = {isDarkMode ? darkTheme : lightTheme}>
+        <Mode onClick = {() => toggleDarkMode()}>
+          {isDarkMode ? <MdDarkMode/> : <MdOutlineDarkMode/>}
+        </Mode>
         <GlobalStyle/>
-        <Router isDarkMode = {isDarkMode} toggleDarkMode = {toggleDarkMode}/>
+        <Router />
         <ReactQueryDevtools initialIsOpen = {true}/>
     </ThemeProvider>
       

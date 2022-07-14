@@ -59,17 +59,7 @@ const Img = styled.img`
     height: 30px;
     margin: 0 10px 0 10px;
 `
-const Mode = styled.div`
-    position: fixed;
-    top:10px;
-    right: 10px;
-    font-size: 30px;
-    &:hover {
-        cursor:pointer;
-        color: 
-    }
 
-`
 interface Icoin {
     id: string,
     name: string,
@@ -80,11 +70,8 @@ interface Icoin {
     type: string,
 }
 
-interface Imode {
-    isDarkMode : boolean,
-    toggleDarkMode: Function,
-}
-function Coins({isDarkMode, toggleDarkMode}: Imode) {
+
+function Coins() {
     /*const [coins, setCoins] = useState<CoinInterface[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -110,10 +97,7 @@ function Coins({isDarkMode, toggleDarkMode}: Imode) {
             <Header>
                 <Title>COIN</Title>
             </Header>
-            <Mode onClick = {() => toggleDarkMode()}>
-                {isDarkMode ? <MdDarkMode/> : <MdOutlineDarkMode/>}
-                
-            </Mode>
+            
             {isLoading ? (
                 <Loader>Loading...</Loader>
             ) : (
