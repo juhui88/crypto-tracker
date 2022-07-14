@@ -2,6 +2,8 @@ import {useQuery} from 'react-query';
 import { axiosCoinHistory } from '../api';
 import ReactApexChart from 'react-apexcharts';
 import { title } from 'process';
+import { useRecoilValue } from 'recoil';
+import { isDarkAtom } from './atom';
 
 interface ChartProps{
     coinId: string;
@@ -21,6 +23,8 @@ interface ICandleChartItem {
   y: number[];
 }
 function Chart({coinId} : ChartProps){
+
+  const isDark = useRecoilValue(isDarkAtom);
     const {isLoading, data} = useQuery<IHistorical[]>(["ohlcv", coinId], () => axiosCoinHistory(coinId), {refetchInterval:5000},);    
     
     return (
@@ -46,7 +50,7 @@ function Chart({coinId} : ChartProps){
                 ]}
                 options={{
                   theme: {
-                    mode: "dark",
+                    mode: isDark? "dark" : "light",
                   },
                   chart: {
                     type: "candlestick",

@@ -5,6 +5,8 @@ import {ReactQueryDevtools} from 'react-query/devtools'
 import styled, { ThemeProvider } from 'styled-components';
 import { darkTheme, lightTheme } from './theme';
 import {MdDarkMode, MdOutlineDarkMode} from "react-icons/md"
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { isDarkAtom } from './routes/atom';
 
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
@@ -78,26 +80,24 @@ const Mode = styled.button`
   &:hover {
     cursor:pointer;
   }
-  color: ${props => props.theme.accentColor}
+  color: ${props => props.theme.textColor}
 `
 
 function App() {
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  const toggleDarkMode = () => {
-      setIsDarkMode((prev) => !prev);
-  }
+  const isDark = useRecoilValue(isDarkAtom);
+  const setDarkAtom = useSetRecoilState(isDarkAtom);
+  const toggleDarkAtom = () => setDarkAtom(prev => !prev)
 
   return (
     <>
-    <ThemeProvider theme = {isDarkMode ? darkTheme : lightTheme}>
-        <Mode onClick = {() => toggleDarkMode()}>
-          {isDarkMode ? <MdDarkMode/> : <MdOutlineDarkMode/>}
-        </Mode>
-        <GlobalStyle/>
-        <Router />
-        <ReactQueryDevtools initialIsOpen = {true}/>
-    </ThemeProvider>
+      <ThemeProvider theme = {isDark ? darkTheme : lightTheme}>
+          <Mode onClick = {toggleDarkAtom}>
+            {isDark ? <MdDarkMode/> : <MdOutlineDarkMode/>}
+          </Mode>
+          <GlobalStyle/>
+          <Router />
+          <ReactQueryDevtools initialIsOpen = {true}/>
+      </ThemeProvider>
       
     </>
     
